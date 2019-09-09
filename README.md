@@ -206,3 +206,27 @@ val serial = arguments.getString(SERIAL_KEY_INT) // <--- getString on a Int valu
 Getting an Integer from a string returns the default **value 0**.
 Getting a String from a Integer returns the default **value null**.
 What you send in Fragment A isn't necessarely what Fragment B needs or asks for.
+
+Forcenately, Navigation includes a feature called SafeArgs that can help. 
+SafeArgs is a gradle plugin that generates code to help guarantee that the arguments on both side match up, while also simplifying argument passing.
+
+**1. Adding SafeArgs**
+
+First, we need to add the navigation-save-args-gradle-plugin dependency into the project Gradle file.
+```gradle
+// Adding the safe-args dependency to the project Gradle file
+dependencies {
+   …
+"android.arch.navigation:navigation-safe-args-gradle-plugin:$version_navigation"
+
+   // NOTE: Do not place your application dependencies here; they belong
+   // in the individual module build.gradle files
+}
+```
+
+At the top of your app Gradle file, after all of the other plugins, add the apply plugin statement with the androidx navigation safeargs plugin.
+```gradle
+// Adding the apply plugin statement for safeargs
+apply plugin: 'androidx.navigation.safeargs'
+```
+
