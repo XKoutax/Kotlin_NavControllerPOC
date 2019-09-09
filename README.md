@@ -178,3 +178,31 @@ override fun onOptionsItemSelected(item: MenuItem?): Boolean {
 }
 ```
 
+----------------------------------------------------------------------
+
+
+## Add Safe Arguments (to pass parameters / data between Fragments)
+
+**Fragment A ---> Bundle ---> Fragment B**
+```kotlin
+// Fragment A
+val argBundle = Bundle()
+argBundle.putString(NAME_KEY_STRING, "content")
+argBundle.putInt(SERIAL_KEY_INT, 42)
+
+...
+
+// Fragment B
+val fragment = FragmentB()
+fragment.arguments = argBundle
+
+```
+This works, but is not ideal. There are ways it can generate bugs. 
+The types must match:
+```kotlin
+val name = arguments.getInt(NAME_KEY_STRING)     // <--- getInt on a String value
+val serial = arguments.getString(SERIAL_KEY_INT) // <--- getString on a Int value
+```
+Getting an Integer from a string returns the default **value 0**.
+Getting a String from a Integer returns the default **value null**.
+What you send in Fragment A isn't necessarely what Fragment B needs or asks for.
