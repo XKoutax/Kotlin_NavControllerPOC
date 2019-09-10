@@ -8,99 +8,225 @@ The Android Trivia application is an application that asks the user trivia quest
 The app navigates using buttons, the Action Bar, and the Navigation Drawer.
 Since students haven't yet learned about saving data or the Android lifecycle, it tries to eliminate bugs caused by configuration changes. 
 
-## Screenshots
-
-![Screenshot1](screenshots/screen_1.png) ![Screenshot2](screenshots/screen_2.png)
-
-## How to use this repo while taking the course
-
-
-Each code repository in this class has a chain of commits that looks like this:
-
-![listofcommits](https://d17h27t6h515a5.cloudfront.net/topher/2017/March/58befe2e_listofcommits/listofcommits.png)
-
-These commits show every step you'll take to create the app. Each commit contains instructions for completing the that step.
-
-Each commit also has a **branch** associated with it of the same name as the commit message, seen below:
-
-![branches](https://d17h27t6h515a5.cloudfront.net/topher/2017/April/590390fe_branches-ud855/branches-ud855.png
-)
-Access all branches from this tab
-
-![listofbranches](https://d17h27t6h515a5.cloudfront.net/topher/2017/March/58befe76_listofbranches/listofbranches.png
-)
-
-
-![branchesdropdown](https://d17h27t6h515a5.cloudfront.net/topher/2017/April/590391a3_branches-dropdown-ud855/branches-dropdown-ud855.png
-)
-
-The branches are also accessible from the drop-down in the "Code" tab
-
-
-## Working with the Course Code
-
-Here are the basic steps for working with and completing exercises in the repo.
-
-The basic steps are:
-
-1. Clone the repo
-2. Checkout the branch corresponding to the step you want to attempt
-3. Find and complete the TODOs
-4. Optionally commit your code changes
-5. Compare your code with the solution
-6. Repeat steps 2-5 until you've gone trough all the steps to complete the toy app
-
-
-**Step 1: Clone the repo**
-
-As you go through the course, you'll be instructed to clone the different exercise repositories, so you don't need to set these up now. You can clone a repository from github in a folder of your choice with the command:
-
-```bash
-git clone https://github.com/udacity/REPOSITORY_NAME.git
+**1. Add navigation to project level gradle**
+```gradle
+buildscript {
+    ext {
+        ...
+        version_navigation = '1.0.0'
+        ...
+    }
 ```
 
-**Step 2: Checkout the step branch**
+**2. Add dependencies to app level gradle**
+```gradle
+dependencies {
+    ...
+    implementation "android.arch.navigation:navigation-fragment-ktx:$version_navigation"     
+    implementation "android.arch.navigation:navigation-ui-ktx:$version_navigation"
+}
+```
+##Adding the Navigation Graph to the Project
 
-As you go through different steps in the code, you'll be told which step you're on, as well as a link to the corresponding branch.
+In the Project window, right-click on the res directory and select New > Android resource file. The New Resource dialog appears.
+Select Navigation as the resource type, and give it the file name of navigation. Make sure it has no qualifiers. Select the navigation.xml file in the new navigation directory under res, and make sure the design tab is selected.
 
-You'll want to check out the branch associated with that step. The command to check out a branch would be:
+**1. Replace the Title Fragment with the Navigation Host Fragment in the Activity Layout **
 
-```bash
-git checkout BRANCH_NAME
+Go to the activity_main layout. Change the class name of the existing Title fragment to androidx.navigation.fragment.NavHostFragment. Change the ID to myNavHostFragment. It needs to know which navigation graph resource to use, so add the app:navGraph attribute and have it point to the navigation graph resource - @navigation/navigation. Finally, set defaultNavHost = true, which means that this navigation host will intercept the system back key.
+
+```xml
+<!-- The NavHostFragment within the activity_main layout -->
+<fragment
+   android:id="@+id/myNavHostFragment"
+   android:name="androidx.navigation.fragment.NavHostFragment"
+   android:layout_width="match_parent"
+   android:layout_height="match_parent"
+   app:navGraph="@navigation/navigation"
+   app:defaultNavHost="true"
+   />
 ```
 
-**Step 3: Find and complete the TODOs**
+**2. Adding the Title and Game Fragments to the Navigation Graph**
 
-Once you've checked out the branch, you'll have the code in the exact state you need. You'll even have TODOs, which are special comments that tell you all the steps you need to complete the exercise. You can easily navigate to all the TODOs using Android Studio's TODO tool. To open the TODO tool, click the button at the bottom of the screen that says TODO. This will display a list of all comments with TODO in the project. 
+Within the navigation editor, click the add button. A list of fragments and activities will drop down. Add fragment_title first, as it is the start destination. (you’ll see that it will automatically be set as the Start Destination for the graph.) Next, add the fragment_game.
 
-We've numbered the TODO steps so you can do them in order:
-![todos](https://d17h27t6h515a5.cloudfront.net/topher/2017/March/58bf00e7_todos/todos.png
-)
-
-**Step 4: Commit your code changes**
-
-After You've completed the TODOs, you can optionally commit your changes. This will allow you to see the code you wrote whenever you return to the branch. The following git code will add and save **all** your changes.
-
-```bash
-git add .
-git commit -m "Your commit message"
+```xml
+<!-- The complete game fragment within the navigation XML, complete with tools:layout. -->
+<fragment
+   android:id="@+id/gameFragment"
+   android:name="com.example.android.navigation.GameFragment"
+   android:label="GameFragment"
+   tools:layout="@layout/fragment_game" />
 ```
 
-**Step 5: Compare with the solution**
+**3. Connecting the Title and Game Fragments with an Action**
+Begin by hovering over the titleFragment. You’ll see a circular connection point on the right side of the fragment view. Click on the connection point and drag it to gameFragment to add an Action that connects the two fragments.
 
-Most exercises will have a list of steps for you to check off in the classroom. Once you've checked these off, you'll see a pop up window with a link to the solution code. Note the **Diff** link:
+**4. Navigating when the Play Button is Hit**
 
-![solutionwindow](https://d17h27t6h515a5.cloudfront.net/topher/2017/March/58bf00f9_solutionwindow/solutionwindow.png
-)
+Return to onCreateView in the TitleFragment Kotlin code. The binding class has been exposed, so you just call binding.playButton.setOnClickListener with a new anonymous function, otherwise known as a lambda. Inside our lambda, use view.findNavcontroller to get the navigation controller for our Navigation Host Fragment. Then, use the navController to navigate using the titleFragment to gameFragment action, by calling navigate(R.id.action_titleFragment_to_gameFragment)
 
-The **Diff** link will take you to a Github diff as seen below:
-![diff](https://d17h27t6h515a5.cloudfront.net/topher/2017/March/58bf0108_diffsceenshot/diffsceenshot.png
-)
+```kotlin
+//The complete onClickListener with Navigation
+binding.playButton.setOnClickListener { view: View ->
+//      Navigation.findNavController(view).navigate(R.id.action_titleFragment_to_gameFragment)
+        view.findNavController().navigate(R.id.action_titleFragment_to_gameFragment)
+}
+```
 
-All of the code that was added in the solution is in green, and the removed code (which will usually be the TODO comments) is in red. 
+or, one more thing you might want to do instead. Navigation can create the onClick listener for us. We can replace the anonymous function with the Navigation.createNavigateOnClickListener call.
 
-You can also compare your code locally with the branch of the following step.
+```kotlin
+//The complete onClickListener with Navigation using createNavigateOnClickListener
+binding.playButton.setOnClickListener(
+        Navigation.createNavigateOnClickListener(R.id.action_titleFragment_to_gameFragment))
 
-## Report Issues
-Notice any issues with a repository? Please file a github issue in the repository.
+```
+
+Done! Now clicking the Play button from the fragment_title will send us to the fragment_game, and pressing back from the fragment_game  will take us back to the fragment_title.
+
+
+
+
+------------------------------------------------------------------------
+
+## Back Stack Manipulation
+
+**1. For the action connecting the gameFragment to the gameOverFragment, set the pop behavior to popTo gameFragment inclusive**
+
+Go to the navigation editor and select the action for navigating from the GameFragment to the GameOverFragment. Select PopTo GameFragment in the attributes pane with the inclusive flag. 
+This will tell the Navigation component to pop fragments off of the fragment back stack until it finds the GameFragment, and then pop off the gameFragment transaction.
+
+If we hadn't set it to inclusive, it would have allowed the game fragment transaction to execute.
+
+Do the same for the GameFragment to the GameWonFragment.
+Now regardless of if we win or less, pressing the phone back button will take us to the title fragment
+
+
+## Up Navigation
+
+**1. Link the NavController to the ActionBar with NavigationUI.setupActionBarWithNavController**
+
+Move to MainActivity. We need to find the NavController. Since we’re in the Activity now, we’ll use the alternate method of finding the controller from the ID of our NavHostFragment using the KTX extension function.
+```kotlin
+val navController = this.findNavController(R.id.myNavHostFragment)
+```
+Link the NavController to our ActionBar.
+```kotlin
+NavigationUI.setupActionBarWithNavController(this, navController)
+```
+
+**2. Override the onSupportNavigateUp method from the activity and call navigateUp in nav controller**
+Finally, we need to have the Activity handle the navigateUp action from our Activity. To do this we override onSupportNavigateUp, find the nav controller, and then we call navigateUp().
+
+```kotlin
+override fun onSupportNavigateUp(): Boolean {
+   val navController = this.findNavController(R.id.myNavHostFragment)
+   return navController.navigateUp()
+}
+```
+
+-----------------------------------------------------------------------
+
+## Adding a Menu
+
+**1. Add AboutFragment to the navigation graph**
+
+Click the "add" button. A list of fragments and activities will drop down. Add fragment_about. Name it with the title_about_trivia string. Set its id to aboutFragment. The menu will need this id to navigate to the correct fragment.
+
+**2. Create new menu resource.**
+
+Right click on the res folder within the Android project and select New Resource File. We’ll call this one overflow_menu, with resource type of Menu. Click on the overflow_menu within the menu directory, to view our new (empty) menu.
+
+**3. Create “About” menu item with ID of aboutFragment destination**
+
+Make sure the design tab is selected. Drag a menu item from the palette into the component tree below. Move to the attributes pane. Set the new item's id to aboutFragment, its destination. That's the id you used when adding the About fragment to the navigation graph. For title, we can use @string/about. The rest of the attributes should be left as their defaults.
+
+**4. Call setHasOptionsMenu() in onCreateView of TitleFragment**
+
+Next we need to tell Android that our TitleFragment has a menu. In onCreateView call setHasOptionsMenu(true).
+
+```kotlin
+override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                         savedInstanceState: Bundle?): View? {
+   ...
+   setHasOptionsMenu(true)
+   return binding.root
+}
+```
+
+**5. Override onCreateOptionsMenu and inflate menu resource**
+
+Next we need to override onCreateOptionsMenu and inflate our new menu resource using the provided menu inflater and menu structure.
+
+```kotlin
+override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+   super.onCreateOptionsMenu(menu, inflater)
+   inflater?.inflate(R.menu.overflow_menu, menu)
+}
+```
+
+**6. Override onOptionsItemSelected and call NavigationUI.onNavDestinationSelected**
+
+Finally, we need to override onOptionsItemSelected to connect it to our NavigationUI.
+```kotlin
+override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+   return NavigationUI.onNavDestinationSelected(item!!,
+           view!!.findNavController())
+           || super.onOptionsItemSelected(item)
+}
+```
+
+----------------------------------------------------------------------
+
+
+## Add Safe Arguments (to pass parameters / data between Fragments)
+
+**Fragment A ---> Bundle ---> Fragment B**
+```kotlin
+// Fragment A
+val argBundle = Bundle()
+argBundle.putString(NAME_KEY_STRING, "content")
+argBundle.putInt(SERIAL_KEY_INT, 42)
+
+...
+
+// Fragment B
+val fragment = FragmentB()
+fragment.arguments = argBundle
+
+```
+This works, but is not ideal. There are ways it can generate bugs. 
+The types must match:
+```kotlin
+val name = arguments.getInt(NAME_KEY_STRING)     // <--- getInt on a String value
+val serial = arguments.getString(SERIAL_KEY_INT) // <--- getString on a Int value
+```
+Getting an Integer from a string returns the default **value 0**.
+Getting a String from a Integer returns the default **value null**.
+What you send in Fragment A isn't necessarely what Fragment B needs or asks for.
+
+Forcenately, Navigation includes a feature called SafeArgs that can help. 
+SafeArgs is a gradle plugin that generates code to help guarantee that the arguments on both side match up, while also simplifying argument passing.
+
+**1. Adding SafeArgs**
+
+First, we need to add the navigation-save-args-gradle-plugin dependency into the project Gradle file.
+```gradle
+// Adding the safe-args dependency to the project Gradle file
+dependencies {
+   …
+"android.arch.navigation:navigation-safe-args-gradle-plugin:$version_navigation"
+
+   // NOTE: Do not place your application dependencies here; they belong
+   // in the individual module build.gradle files
+}
+```
+
+At the top of your app Gradle file, after all of the other plugins, add the apply plugin statement with the androidx navigation safeargs plugin.
+```gradle
+// Adding the apply plugin statement for safeargs
+apply plugin: 'androidx.navigation.safeargs'
+```
 
