@@ -19,6 +19,7 @@ buildscript {
 ```
 
 **2. Add dependencies to app level gradle**
+
 ```gradle
 dependencies {
     ...
@@ -26,12 +27,12 @@ dependencies {
     implementation "android.arch.navigation:navigation-ui-ktx:$version_navigation"
 }
 ```
-##Adding the Navigation Graph to the Project
+## Adding the Navigation Graph to the Project
 
 In the Project window, right-click on the res directory and select New > Android resource file. The New Resource dialog appears.
 Select Navigation as the resource type, and give it the file name of navigation. Make sure it has no qualifiers. Select the navigation.xml file in the new navigation directory under res, and make sure the design tab is selected.
 
-**1. Replace the Title Fragment with the Navigation Host Fragment in the Activity Layout **
+**1. Replace the Title Fragment with the Navigation Host Fragment in the Activity Layout**
 
 Go to the activity_main layout. Change the class name of the existing Title fragment to androidx.navigation.fragment.NavHostFragment. Change the ID to myNavHostFragment. It needs to know which navigation graph resource to use, so add the app:navGraph attribute and have it point to the navigation graph resource - @navigation/navigation. Finally, set defaultNavHost = true, which means that this navigation host will intercept the system back key.
 
