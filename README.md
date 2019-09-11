@@ -50,7 +50,11 @@ Go to the activity_main layout. Change the class name of the existing Title frag
 
 **2. Adding the Title and Game Fragments to the Navigation Graph**
 
-Within the navigation editor, click the add button. A list of fragments and activities will drop down. Add fragment_title first, as it is the start destination. (you’ll see that it will automatically be set as the Start Destination for the graph.) Next, add the fragment_game.
+Within the navigation editor, click the add button. A list of fragments and activities will drop down. Add fragment_title first, as it is the start destination. (you’ll see that it will automatically be set as the Start Destination for the graph.) 
+
+![alt text](https://camo.githubusercontent.com/5d09e236285f108549159948046afb120bf61b1d/68747470733a2f2f692e696d6775722e636f6d2f46724e496476412e706e67)
+
+Next, add the fragment_game.
 
 ```xml
 <!-- The complete game fragment within the navigation XML, complete with tools:layout. -->
@@ -97,9 +101,12 @@ Done! Now clicking the Play button from the fragment_title will send us to the f
 **1. For the action connecting the gameFragment to the gameOverFragment, set the pop behavior to popTo gameFragment inclusive**
 
 Go to the navigation editor and select the action for navigating from the GameFragment to the GameOverFragment. Select PopTo GameFragment in the attributes pane with the inclusive flag. 
+
+![alt text](https://camo.githubusercontent.com/f2d4132540ea47aa69a9e2e7b8c40327af43e390/68747470733a2f2f692e696d6775722e636f6d2f30417a446e66702e706e67)
+
 This will tell the Navigation component to pop fragments off of the fragment back stack until it finds the GameFragment, and then pop off the gameFragment transaction.
 
-If we hadn't set it to inclusive, it would have allowed the game fragment transaction to execute.
+If we hadn't set it to inclusive, it would have allowed the gameFragment transaction to execute.
 
 Do the same for the GameFragment to the GameWonFragment.
 Now regardless of if we win or less, pressing the phone back button will take us to the title fragment
@@ -114,7 +121,7 @@ Move to MainActivity. We need to find the NavController. Since we’re in the Ac
 val navController = this.findNavController(R.id.myNavHostFragment)
 ```
 Link the NavController to our ActionBar.
-```kotlin
+```kotlhttps://camo.githubusercontent.com/f2d4132540ea47aa69a9e2e7b8c40327af43e390/68747470733a2f2f692e696d6775722e636f6d2f30417a446e66702e706e67in
 NavigationUI.setupActionBarWithNavController(this, navController)
 ```
 
@@ -230,4 +237,63 @@ At the top of your app Gradle file, after all of the other plugins, add the appl
 // Adding the apply plugin statement for safeargs
 apply plugin: 'androidx.navigation.safeargs'
 ```
+
+**2. Switch the GameFragment to use generated NavDirections when navigating to the GameOver and GameWon fragments**
+
+Next, go to the code for the Game fragment. First, replace the action ID for the game won state with GameFragmentDirections.actionGameFragmentToGameWonFragment().
+```kotlin
+else {
+//  Using directions to navigate to the GameWonFragment
+//  view.findNavController().navigate(R.id.action_gameFragment_to_gameWonFragment)
+view.findNavController().navigate(GameFragmentDirections.actionGameFragmentToGameWonFragment())
+}
+```
+
+Next, do the same thing for the game over state.
+
+```kotlin
+else {
+//  Using directions to navigate to the GameOverFragment
+//  view.findNavController().navigate(R.id.action_gameFragment_to_gameOverFragment)
+view.findNavController().navigate(GameFragmentDirections.actionGameFragmentToGameOverFragment())
+}
+```
+
+**3. Add the numQuestions and numCorrect Integer Arguments using the navigation editor**
+Next, go to the navigation editor and select the GameWon fragment. Click the little triangle next to arguments to expand the argument section. Add a numQuestions and a numCorrect argument, both with integer type.
+
+![alt text](https://i.imgur.com/YloqR90.jpg)
+
+If you try to build the app now, you should get two compile errors:
+```
+No value passed for parameter 'numQuestions'
+No value passed for parameter 'numCorrect'
+```
+
+**4. Add the parameters to the gameFragment to gameWonFragment action**
+
+Let’s add those parameters! Click on the error link in the Build tab to go right to the correct place in GameFragment.kt.
+
+```kotlin
+// Adding the parameters to the Action
+view.findNavController().navigate(GameFragmentDirections.actionGameFragmentToGameWonFragment(numQuestions, questionIndex))
+```
+
+**5. Display the arguments using a Toast**
+
+We’ll use GameWonFragmentArgs to extract the args class from the Bundle, which we can then display in a Toast.
+
+```kotlin
+val args = GameWonFragmentArgs.fromBundle(arguments!!)
+Toast.makeText(context, "NumCorrect: ${args.numCorrect}, NumQuestions: ${args.numQuestions}", Toast.LENGTH_LONG).show()
+```
+If Android Studio display an error, you may have to rebuild your project to make GameWonFragmentArgs available.
+Run the app and see that the arguments got passed successfully to your GameWonFragment. You do have to win the Trivia game first though.
+
+**6. Replace navigation to action IDs with NavDirections in GameOverFragment, GameWonFragment, and TitleFragment**
+Since we're using safe arguments, let's use NavDirections everywhere. Replace navigation to an action ID in GameOverFragment, GameWonFragment, and TitleFragment.
+
+
+
+
 
