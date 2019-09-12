@@ -293,6 +293,28 @@ Run the app and see that the arguments got passed successfully to your GameWonFr
 **6. Replace navigation to action IDs with NavDirections in GameOverFragment, GameWonFragment, and TitleFragment**
 Since we're using safe arguments, let's use NavDirections everywhere. Replace navigation to an action ID in GameOverFragment, GameWonFragment, and TitleFragment.
 
+GameOverFragment:
+```kotlin
+binding.tryAgainButton.setOnClickListener { view: View ->
+//  view: View -> view.findNavController().navigate(R.id.action_gameOverFragment_to_gameFragment)
+view.findNavController().navigate(GameOverFragmentDirections.actionGameOverFragmentToGameFragment())
+}
+```
+
+GameWonFragment:
+```kotlin
+binding.nextMatchButton.setOnClickListener { view: View ->
+//  view.findNavController().navigate(R.id.action_gameWonFragment_to_gameFragment)
+view.findNavController().navigate(GameWonFragmentDirections.actionGameWonFragmentToGameFragment())
+}
+```
+
+TitleFragment:
+```kotlin
+binding.playButton.setOnClickListener(
+//  Navigation.createNavigateOnClickListener(R.id.action_titleFragment_to_gameFragment)
+Navigation.createNavigateOnClickListener(TitleFragmentDirections.actionTitleFragmentToGameFragment()))
+````
 
 
 
