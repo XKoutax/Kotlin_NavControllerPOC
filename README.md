@@ -262,7 +262,7 @@ view.findNavController().navigate(GameFragmentDirections.actionGameFragmentToGam
 **3. Add the numQuestions and numCorrect Integer Arguments using the navigation editor**
 Next, go to the navigation editor and select the GameWon fragment. Click the little triangle next to arguments to expand the argument section. Add a numQuestions and a numCorrect argument, both with integer type.
 
-![alt text](https://i.imgur.com/YloqR90.jpg)
+![alt text](https://i.imgur.com/gco5P59.jpg)
 
 If you try to build the app now, you should get two compile errors:
 ```
