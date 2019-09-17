@@ -17,6 +17,7 @@
 package com.example.android.navigation
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,6 +31,9 @@ import com.example.android.navigation.databinding.FragmentGameWonBinding
 class GameWonFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
+
+        Log.d("xxx", "onCreate GameWonFragment")
+
         // Inflate the layout for this fragment
         val binding: FragmentGameWonBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_game_won, container, false)
 
@@ -43,4 +47,10 @@ class GameWonFragment : Fragment() {
 
         return binding.root
     }
+
+    override fun onDestroyView() {
+        Log.d("xxx", "onDestroy GameWonFragment\n")
+        super.onDestroyView()
+    }
+
 }

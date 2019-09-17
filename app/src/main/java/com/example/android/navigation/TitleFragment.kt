@@ -2,6 +2,7 @@ package com.example.android.navigation
 
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.TextView
@@ -15,6 +16,8 @@ import com.example.android.navigation.databinding.FragmentTitleBinding
 class TitleFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+
+        Log.d("xxx", "onCreate TitleFragment")
 
         val binding: FragmentTitleBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_title, container, false)
 
@@ -36,8 +39,13 @@ class TitleFragment : Fragment() {
                 Navigation.createNavigateOnClickListener(TitleFragmentDirections.actionTitleFragmentToGameFragment())
         )
 
+
+
+
         setHasOptionsMenu(true)
         return binding.root
+
+
 
     }
 
@@ -51,7 +59,11 @@ class TitleFragment : Fragment() {
         return NavigationUI.onNavDestinationSelected(item, view!!.findNavController())
                 || super.onOptionsItemSelected(item)
 
+    }
 
+    override fun onDestroyView() {
+        Log.d("xxx", "onDestroy TitleFragment\n")
+        super.onDestroyView()
     }
 }
 
