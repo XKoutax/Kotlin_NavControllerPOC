@@ -40,6 +40,10 @@ class GameOverFragment : Fragment() {
             view.findNavController().navigate(GameOverFragmentDirections.actionGameOverFragmentToGameFragment())
         }
 
+        binding.goToFinalButton.setOnClickListener { view: View ->
+            view.findNavController().navigate(GameOverFragmentDirections.actionGameOverFragmentToFinalFragment())
+        }
+
         return binding.root
     }
 

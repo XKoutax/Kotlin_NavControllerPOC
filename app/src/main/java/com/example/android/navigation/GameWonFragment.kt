@@ -42,6 +42,11 @@ class GameWonFragment : Fragment() {
             view.findNavController().navigate(GameWonFragmentDirections.actionGameWonFragmentToGameFragment())
         }
 
+        binding.goToFinalBtn.setOnClickListener { view: View ->
+            //  view.findNavController().navigate(R.id.action_gameWonFragment_to_gameFragment)
+            view.findNavController().navigate(GameWonFragmentDirections.actionGameWonFragmentToFinalFragment())
+        }
+
         var args = GameWonFragmentArgs.fromBundle(arguments!!)
         Toast.makeText(context, "NumCorrect: ${args.numCorrect}, numQuestion: ${args.numQuestions}", Toast.LENGTH_LONG).show()
 

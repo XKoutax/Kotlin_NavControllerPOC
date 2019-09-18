@@ -25,21 +25,6 @@
         android:layout_height="match_parent"
         android:background="@color/gameOverBackground">
 
-        <ImageView
-            android:id="@+id/gameOverFragment"
-            android:layout_width="wrap_content"
-            android:layout_height="362dp"
-            android:layout_marginStart="@dimen/horizontal_margin"
-            android:layout_marginEnd="@dimen/horizontal_margin"
-            android:layout_marginBottom="8dp"
-            android:scaleType="fitCenter"
-            app:layout_constraintBottom_toTopOf="@+id/tryAgainButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="packed"
-            app:srcCompat="@drawable/try_again" />
-
         <Button
             android:id="@+id/tryAgainButton"
             android:layout_width="wrap_content"
@@ -58,5 +43,37 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/gameOverFragment" />
+
+        <Button
+            android:id="@+id/goToFinalButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:paddingStart="@dimen/button_padding"
+            android:paddingEnd="@dimen/button_padding"
+            android:text="GO TO FINAL"
+            android:textColor="?colorAccent"
+            android:textSize="@dimen/button_text_size"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tryAgainButton" />
+
+        <ImageView
+            android:id="@+id/gameOverFragment"
+            android:layout_width="wrap_content"
+            android:layout_height="362dp"
+            android:layout_marginStart="@dimen/horizontal_margin"
+            android:layout_marginEnd="@dimen/horizontal_margin"
+            android:layout_marginBottom="8dp"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toTopOf="@+id/tryAgainButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:srcCompat="@drawable/try_again" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
